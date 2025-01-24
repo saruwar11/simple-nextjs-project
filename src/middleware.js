@@ -1,16 +1,17 @@
-// import { NextResponse } from "next/server";
-// import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { NextResponse } from "next/server";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-// export async function middleware(req) {
-//   const session = await getKindeServerSession(req);
+export async function middleware(req) {
+  const { isAuthenticated } = getKindeServerSession(req);
+  const isUserAuthenticated = await isAuthenticated();
 
-//   if (!session?.isAuthenticated) {
-//     return NextResponse.redirect(new URL("/api/auth/login", req.url));
-//   }
+  if (!isUserAuthenticated) {
+    return NextResponse.redirect(new URL("/api/auth/login", req.url));
+  }
 
-//   return NextResponse.next();
-// }
+  return NextResponse.next();
+}
 
-// export const config = {
-//   matcher: ["/profile/:path*"],
-// };
+export const config = {
+  matcher: ["/profile/:path*"],
+};
